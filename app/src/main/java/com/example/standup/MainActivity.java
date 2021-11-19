@@ -29,14 +29,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
+
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+
+        boolean alarmUp = (PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent,
+                PendingIntent.FLAG_NO_CREATE) != null);
+        alarmToggle.setChecked(alarmUp);
 
         final PendingIntent notifyPendingIntent = PendingIntent.getBroadcast( this,
                 NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        ToggleButton alarmToggle = findViewById(R.id.alarmToggle);
         alarmToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
